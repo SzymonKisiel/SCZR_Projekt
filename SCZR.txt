@@ -1,0 +1,1 @@
+./Debug/processC.cpp.o ./Debug/processD.cpp.o ./Debug/main.cpp.o ./Debug/processA.cpp.o ./Debug/processB.cpp.o ./Debug/functions.cpp.o
