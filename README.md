@@ -8,7 +8,7 @@ sudo apt-get install gcc
 sudo add-apt-repository ppa:allegro/5.2  \
 sudo apt-get update  \
 sudo apt-get install liballegro5-dev
-## Ustawienia w CodeLite
+## Ustawienia w projekcie CodeLite
 #### Compiler
 Include Paths: usr/include
 #### Linker
