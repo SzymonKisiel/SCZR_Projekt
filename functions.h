@@ -68,9 +68,9 @@ public:
     
     State getState() {
         State result;
+        
         sem_wait(&sem2);
         result = this->state;
-        std::cout << "GET_STATE() -> " << this->state << "\n";
         sem_post(&sem2);
         
         return result;

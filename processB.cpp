@@ -39,7 +39,8 @@ void* processB(void* varg) {
     ALLEGRO_EVENT event;
     State state = noJump;
     
-    while (true) {
+    bool done = false;
+    while (!done) {
         
         al_wait_for_event(queue, &event);
         
@@ -51,6 +52,8 @@ void* processB(void* varg) {
                 case ALLEGRO_KEY_UP:
                     state = bigJump;
                     break;
+                case ALLEGRO_KEY_ESCAPE:
+                    done = true;
                 default:
                     state = noJump;
                     break;

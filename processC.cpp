@@ -259,18 +259,6 @@ public:
                 
                 State state = data->getState();
                 
-                switch (state) {
-                    case noJump:
-                        std::cout << "Brak skoku\n";
-                        break;
-                    case smallJump:
-                        std::cout << "Maly skoku\n";
-                        break;
-                    case bigJump:
-                        std::cout << "Duzy skoku\n";
-                        break;
-                }
-                
 				if(!player.getIsInFlight() && state != noJump) 
                     player.jump(state);
 	
