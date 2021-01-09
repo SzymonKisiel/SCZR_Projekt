@@ -16,8 +16,8 @@ const int GAP = 60;
 const int POSITION_OF_GENERATING_OBSTACLES = DISPLAY_WIDTH;
 
 const int MINIMUM_SPEED = 1;
-const int SMALL_JUMP_HEIGHT = 55;
-const int BIG_JUMP_HEIGHT = 105;
-const float GRAVITY = 0.3;
+const int SMALL_JUMP_HEIGHT = 70;
+const int BIG_JUMP_HEIGHT = 130;
+const float GRAVITY = 0.01;
 const float SMALL_VELOCITY = sqrt(2*SMALL_JUMP_HEIGHT*GRAVITY);
 const float BIG_VELOCITY = sqrt(2*BIG_JUMP_HEIGHT*GRAVITY);

@@ -28,11 +28,12 @@
         <IncludePath Value="."/>
         <IncludePath Value="usr/include"/>
       </Compiler>
-      <Linker Options="-pthread" Required="yes">
+      <Linker Options="" Required="yes">
         <LibraryPath Value="usr/lib"/>
         <Library Value="allegro"/>
         <Library Value="allegro_primitives"/>
         <Library Value="allegro_font"/>
+        <Library Value="pthread"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>

@@ -12,15 +12,15 @@ void* processA(void* varg) {
     }
     
     
-    /*
-    Data* data = ((Data*)varg);
+    
+    /*Data* data = ((Data*)varg);
     std::cout << "x = " << data->getX() << '\n';
     for (int i = 0; i < 100000; ++i) {
         data->incrementX();
         std::cout << "x = " << data->getX() << '\n';
-    }
+    }*/
     sleep(2);
-    */
+    
     sleep(1);
     
     

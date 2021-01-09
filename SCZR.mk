@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=sk
-Date                   :=08/01/21
+Date                   :=09/01/21
 CodeLitePath           :=/home/sk/.codelite
 LinkerName             :=/usr/bin/g++
 SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
@@ -35,12 +35,12 @@ PreprocessOnlySwitch   :=-E
 ObjectsFileList        :="SCZR.txt"
 PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
-LinkOptions            :=  -pthread
+LinkOptions            :=  
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)usr/include 
 IncludePCH             := 
 RcIncludePath          := 
-Libs                   := $(LibrarySwitch)allegro $(LibrarySwitch)allegro_primitives $(LibrarySwitch)allegro_font 
-ArLibs                 :=  "allegro" "allegro_primitives" "allegro_font" 
+Libs                   := $(LibrarySwitch)allegro $(LibrarySwitch)allegro_primitives $(LibrarySwitch)allegro_font $(LibrarySwitch)pthread 
+ArLibs                 :=  "allegro" "allegro_primitives" "allegro_font" "pthread" 
 LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)usr/lib 
 
 ##

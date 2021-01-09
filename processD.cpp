@@ -66,20 +66,6 @@ void* processD(void* varg) {
     }
     
     Data* data = ((Data*)varg);
-    
-//    if(!al_init())
-//    {
-//        printf("couldn't initialize allegro\n");
-//        return NULL;
-//    }
-    /*
-    if(!al_install_keyboard())
-    {
-        printf("couldn't initialize keyboard\n");
-        return NULL;
-    }*/
-
-    
 
     ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
     if(!queue)
@@ -88,7 +74,7 @@ void* processD(void* varg) {
         return NULL;
     }
 
-    ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
+    ALLEGRO_TIMER* timer = al_create_timer(1.0 / 60.0);
     if(!timer)
     {
         printf("couldn't initialize timer\n");
@@ -155,9 +141,8 @@ void* processD(void* varg) {
             for (int i = 0; i < MAX_OBSTACLES; ++i) {
                 draw_obstacle(temp[i], temp1[i]);
             }
-            //al_draw_filled_rectangle(DISPLAY_WIDTH / 2 - 10, DISPLAY_HEIGHT / 2 - 10, DISPLAY_WIDTH / 2 + 10, DISPLAY_HEIGHT / 2 + 10, al_map_rgb(255, 0, 0));
-            al_flip_display();
             
+            al_flip_display();
             redraw = false;
         }
     }

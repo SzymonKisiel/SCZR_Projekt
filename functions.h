@@ -4,13 +4,27 @@
 
 #include "constants.h"
 
+
+//debug
+#include <iostream>
+
 int thread_to_core(int core_id);
+
+enum State
+{
+    noJump = 0,
+    smallJump = 1,
+    bigJump = 2
+};
 
 class Data {
     int x;
     bool y;
     pthread_mutex_t muteks;
     sem_t sem;
+    sem_t sem2;
+    
+    State state;
     
     int playerPosY;
     int obstaclePosX[3];
@@ -18,6 +32,9 @@ class Data {
 public:
     Data() {
         sem_init(&sem, 0, 1);
+        sem_init(&sem2, 0, 1);
+        x = 0;
+        state = noJump;
     }
     
     void incrementX() {
@@ -40,6 +57,23 @@ public:
     
     void setX() {
         
+    }
+    
+    void setState(State newState) {
+        sem_wait(&sem2);
+        this->state = newState;
+        sem_post(&sem2);
+        
+    }
+    
+    State getState() {
+        State result;
+        sem_wait(&sem2);
+        result = this->state;
+        std::cout << "GET_STATE() -> " << this->state << "\n";
+        sem_post(&sem2);
+        
+        return result;
     }
     
     void setGameInfo(int playerPosY, int obstaclePosX[], int obstacleType[]) {

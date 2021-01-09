@@ -47,8 +47,11 @@ public :
         isInFlight = false;
     }
 
-    void Jump(int newJumpHeight){
-        jumpHeight = newJumpHeight;
+    void jump(State state){
+        if (state == smallJump)
+            jumpHeight = SMALL_JUMP_HEIGHT;
+        else if (state == bigJump)
+            jumpHeight = BIG_JUMP_HEIGHT;
 
         if(jumpHeight == SMALL_JUMP_HEIGHT) startVelocity = SMALL_VELOCITY;
         else if(jumpHeight == BIG_JUMP_HEIGHT) startVelocity = BIG_VELOCITY;
@@ -56,6 +59,16 @@ public :
         jumpSpeed = startVelocity;
         isInFlight = true;
     }
+    /*
+    void jump(int newJumpHeight){
+        jumpHeight = newJumpHeight;
+
+        if(jumpHeight == SMALL_JUMP_HEIGHT) startVelocity = SMALL_VELOCITY;
+        else if(jumpHeight == BIG_JUMP_HEIGHT) startVelocity = BIG_VELOCITY;
+
+        jumpSpeed = startVelocity;
+        isInFlight = true;
+    }*/
 
     void goNext(){
         positionY += jumpSpeed;
@@ -64,7 +77,11 @@ public :
             startVelocity = 0;
             isInFlight = false;
         }
-        else jumpSpeed -= GRAVITY;
+        /*else if (jumpSpeed < 1 && jumpSpeed > -1) {
+            jumpSpeed -= GRAVITY/100;
+        }*/
+        else
+            jumpSpeed -= GRAVITY;
     }
 
     int getPositionX(){
@@ -166,14 +183,20 @@ private:
 
     bool gameOverConditions(){
         for(int i=0; i<MAX_OBSTACLES; ++i){
-            if(player.getPositionX() >= obstacles[i].getPositionX() && player.getPositionX() - PLAYER_SIZE <= (obstacles[i].getPositionX() + obstacles[i].getWidth()) && player.getPositionY() + PLAYER_SIZE > obstacles[i].getHeight() + GAP) return true; //przeszkoda u góry
-            else if(player.getPositionX() >= obstacles[i].getPositionX() && player.getPositionX() - PLAYER_SIZE <= (obstacles[i].getPositionX() + obstacles[i].getWidth()) && player.getPositionY() < obstacles[i].getHeight()) return true; // przeszkoda z dołu
+            if(player.getPositionX() >= obstacles[i].getPositionX() && 
+               player.getPositionX() - PLAYER_SIZE <= (obstacles[i].getPositionX() + obstacles[i].getWidth()) && 
+               player.getPositionY() + PLAYER_SIZE > obstacles[i].getHeight() + GAP) 
+                   return true; //przeszkoda u góry
+            else if(player.getPositionX() >= obstacles[i].getPositionX() && 
+                    player.getPositionX() - PLAYER_SIZE <= (obstacles[i].getPositionX() + obstacles[i].getWidth()) && 
+                    player.getPositionY() < obstacles[i].getHeight()) 
+                        return true; // przeszkoda z dołu
         }
         return false;
     }
 
     void generateObstacle(int position){
-        typeOfObstacle newType = typeOfObstacle(rand() % MAX_OBSTACLES);
+        typeOfObstacle newType = typeOfObstacle(rand() % MAX_OBSTACLES); //typeOfObstacle(2);//
         Obstacle newObstacle(newType, position);
         obstacles[numberOfObstacle] = newObstacle;
         numberOfObstacle = (numberOfObstacle + 1) % MAX_OBSTACLES;
@@ -193,7 +216,7 @@ public:
 			cout << "QUEUE ERROR" << std::endl;
 		}
 		
-		timer_FPS = al_create_timer( 1.0 / 30 );
+		timer_FPS = al_create_timer( 1.0 / 60 );
 		if( !timer_FPS )
 		{
 			cout << "TIMER ERROR" << std::endl;
@@ -203,8 +226,9 @@ public:
 		
 		al_start_timer( timer_FPS );
 		
-        for(int i=MAX_OBSTACLES; i>=1; --i){
-            generateObstacle(POSITION_OF_GENERATING_OBSTACLES/i);
+        for(int i=1; i<=MAX_OBSTACLES; ++i){
+            //generateObstacle(POSITION_OF_GENERATING_OBSTACLES/i);
+            generateObstacle(i * DISPLAY_WIDTH / 3 + DISPLAY_WIDTH / 3);
         }
     }
 
@@ -215,7 +239,7 @@ public:
 			if(ev1.type == ALLEGRO_EVENT_TIMER){
 				for(int i=0; i<MAX_OBSTACLES; ++i){
 					obstacles[i].setPositionX(obstacles[i].getPositionX() - player.getSpeed());
-					if(player.getPositionX() - PLAYER_SIZE > obstacles[i].getPositionX() + obstacles[i].getWidth()) 
+					if(obstacles[i].getPositionX() + obstacles[i].getWidth() < 0) 
                         generateObstacle(POSITION_OF_GENERATING_OBSTACLES);
 				}
                 int temp[MAX_OBSTACLES];
@@ -224,7 +248,7 @@ public:
                     temp[i] = obstacles[i].getPositionX();
                     temp1[i] = obstacles[i].getTypeOfObstacle();
                 }
-                data->setGameInfo(player.getPositionY(), temp, temp1);
+                
                 
                 /*std::cout << "Pisanie:\n";
                 std::cout << '\t' << player.getPositionY() << '\n';
@@ -233,11 +257,29 @@ public:
                     std::cout << '\t' << obstacles[i].getTypeOfObstacle() << '\n';
                 }*/
                 
-				//if(!player.getIsInFlight()) player.Jump(BIG_JUMP_HEIGHT);//(SMALL_JUMP_HEIGHT);
+                State state = data->getState();
+                
+                switch (state) {
+                    case noJump:
+                        std::cout << "Brak skoku\n";
+                        break;
+                    case smallJump:
+                        std::cout << "Maly skoku\n";
+                        break;
+                    case bigJump:
+                        std::cout << "Duzy skoku\n";
+                        break;
+                }
+                
+				if(!player.getIsInFlight() && state != noJump) 
+                    player.jump(state);
 	
-				if(player.getIsInFlight()) player.goNext();
+				if(player.getIsInFlight())
+                    player.goNext();
 	
 				player.setScore(player.getPlayerScore()+player.getSpeed());
+                
+                data->setGameInfo(player.getPositionY(), temp, temp1);
 			}
 		}
     }
