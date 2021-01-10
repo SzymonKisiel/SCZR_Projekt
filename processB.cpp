@@ -3,6 +3,7 @@
 #include <allegro5/allegro.h>
 #include "functions.h"
 
+
 void* processB(void* varg) {
     std::cout << "Proces B: " << pthread_self() << "\n";
     if (thread_to_core(1) != 0) {
@@ -11,17 +12,23 @@ void* processB(void* varg) {
     }
     
     Data* data = ((Data*)varg);
-    /*std::cout << "x = " << data->getX() << '\n';
-    for (int i = 0; i < 100000; ++i) {
-        data->incrementX();
-        std::cout << "x = " << data->getX() << '\n';
+    
+    int freq;
+    State state = noJump;
+    
+    while (true) {
+        freq = data->getFreq(); //recieve frequency from process A
+        std::cout << freq << std::endl; 
+        if (freq < 400)
+            state = noJump;
+        else if (freq < 800)
+            state = smallJump;
+        else
+            state = bigJump;
+        data->setState(state); //send state to process C
     }
     
-    sleep(1);
-    
-    sleep(1);*/
-    
-    
+    /*
      // Tymczasowo input z klawiatury
      
     if (!al_install_keyboard()) {
@@ -59,13 +66,10 @@ void* processB(void* varg) {
                     break;
             }
         }
-        data->setState(state);
+        data->setState(state); //send state to process C
         
     }
-    
-    
-    
-    
+    */
     
     std::cout << "Proces B zakonczony\n";
     return NULL;
