@@ -10,8 +10,10 @@ const int PLAYER_SIZE = 20;
 const int MAX_OBSTACLES=3;
 const int OBSTACLE_SMALL_HEIGHT=50;
 const int OBSTACLE_BIG_HEIGHT=100;
-const int OBSTACLE_WIDTH = 20;
+const int OBSTACLE_WIDTH = 10;
 const int GAP = 60;
+
+const int FLIGHT_LENGTH = 20;
 
 const int POSITION_OF_GENERATING_OBSTACLES = DISPLAY_WIDTH;
 
