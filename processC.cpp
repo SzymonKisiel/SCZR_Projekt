@@ -7,6 +7,9 @@
 #include <ctime>
 #include <math.h>
 #include <allegro5/allegro.h>
+#include <chrono>
+#include "timercpp.h"
+
 
 
 using namespace std;
@@ -232,44 +235,69 @@ public:
         }
     }
 
-    void loop(Data* data){
+    void loop(Data* data, Timer t){
+        bool flag [100];
+        int l = 0;
+
         while(!gameOverConditions()){
-			al_wait_for_event( queue, & ev1 );
-			
-			if(ev1.type == ALLEGRO_EVENT_TIMER){
-				for(int i=0; i<MAX_OBSTACLES; ++i){
-					obstacles[i].setPositionX(obstacles[i].getPositionX() - player.getSpeed());
-					if(obstacles[i].getPositionX() + obstacles[i].getWidth() < 0) 
+            flag[l]= false;
+
+            t.setTimeout([&](int loop) {
+                if (!flag[ loop ]) {
+                    std::cout << "too slow proc C..." << loop << std::endl;
+                }// else {
+                   // std::cout << "ok " << loop << std::endl;}
+            }, 200, l);
+//            auto t1 = std::chrono::high_resolution_clock::now();
+
+            al_wait_for_event( queue, & ev1 );
+            if(ev1.type == ALLEGRO_EVENT_TIMER){
+                for(int i=0; i<MAX_OBSTACLES; ++i){
+                    obstacles[i].setPositionX(obstacles[i].getPositionX() - player.getSpeed());
+                    if(obstacles[i].getPositionX() + obstacles[i].getWidth() < 0)
                         generateObstacle(POSITION_OF_GENERATING_OBSTACLES);
-				}
+                }
                 int temp[MAX_OBSTACLES];
                 int temp1[MAX_OBSTACLES];
                 for (int i = 0; i < MAX_OBSTACLES; ++i) {
                     temp[i] = obstacles[i].getPositionX();
                     temp1[i] = obstacles[i].getTypeOfObstacle();
                 }
-                
-                
+
+
                 /*std::cout << "Pisanie:\n";
                 std::cout << '\t' << player.getPositionY() << '\n';
                 for (int i = 0; i < MAX_OBSTACLES; ++i) {
                     std::cout << '\t' << obstacles[i].getPositionX() << '\n';
                     std::cout << '\t' << obstacles[i].getTypeOfObstacle() << '\n';
                 }*/
-                
+
                 State state = data->getState();
-                
-				if(!player.getIsInFlight() && state != noJump) 
+
+                if(!player.getIsInFlight() && state != noJump)
                     player.jump(state);
-	
-				if(player.getIsInFlight())
+
+                if(player.getIsInFlight())
                     player.goNext();
-	
-				player.setScore(player.getPlayerScore()+player.getSpeed());
-                
+
+                player.setScore(player.getPlayerScore()+player.getSpeed());
+
                 data->setGameInfo(player.getPositionY(), temp, temp1);
-			}
-		}
+            }
+            flag[l]=true;
+//            auto t2 = std::chrono::high_resolution_clock::now();
+            l++;
+            l=l%100;
+
+
+//            auto duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+          /*  std::cout << duration<<endl;
+            if (duration > 17000){
+                std::cout << "to slow... process C: " << duration<<" "<< l-1 << endl; }*/
+        }
+
+
+
     }
 
     bool restart(){
@@ -293,7 +321,8 @@ public:
 };
 
 void* processC(void* varg)
-{	
+{
+    Timer t;
     std::cout << "Proces C: " << pthread_self() << "\n";
     if (thread_to_core(2) != 0) {
         std::cout << "Nie udalo sie przypisac procesu C do rdzenia 2\n";
@@ -303,15 +332,15 @@ void* processC(void* varg)
     
     srand(time(0));
 
-//	if( !al_init() )
-//    {
-//        cout << "ERROR" << std::endl;
-//        return NULL;
-//    }
+	if( !al_init() )
+    {
+        cout << "ERROR" << std::endl;
+        return NULL;
+    }
 
     Game game;
     game.start();
-    game.loop(data);
+    game.loop(data, t);
     game.finish();
     
     std::cout << "Proces C zakonczony\n";
