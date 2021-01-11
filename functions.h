@@ -7,15 +7,7 @@
 
 #include "constants.h"
 
-
-//debug
-#include <iostream>
 int thread_to_core(int core_id);
-
-
-
-
-
 
 enum State
 {
@@ -24,10 +16,7 @@ enum State
     bigJump = 2
 };
 
-class Data {
-    int x;
-    bool y;
-    pthread_mutex_t muteks;
+class SharedMemory {
     sem_t sem;
     sem_t sem2;
     sem_t sem3;
@@ -43,11 +32,10 @@ class Data {
     int obstaclePosX[3];
     int obstacleType[3];
 public:
-    Data() {
+    SharedMemory() {
         sem_init(&sem, 0, 1);
         sem_init(&sem2, 0, 1);
         sem_init(&sem3, 0, 1);
-        x = 0;
         state = noJump;
     }
 
@@ -115,8 +103,7 @@ class audioInput {
   char *sgb;
   int b_ind, b_size, n_f, n_tw, sg_size, win_size;
   float dt, t_memory, Hz_per_pixel;
-  
-  bool quit, pause;
+
   pthread_t capture_thread;
   fftwf_plan fftw_p;
 
@@ -149,8 +136,6 @@ class audioInput {
   }
 
   audioInput() {            // nontrivial constructor
-    quit = false;
-    pause = false;
     channels = 2;       // Had to change to stereo for System76 ! (was mono)
     bytes_per_frame = 2 * channels;      // 16-bit
     req_rate = 44100;         // audio sampling rate in Hz
@@ -179,9 +164,6 @@ class audioInput {
     n_tw = 940; // # time windows: should be multiple of 4 for glDrawPixels
 
     Hz_per_pixel = 1.0F / (win_size*dt);
- 
-    // Start recording thread... runs independently, writing data into ai->b
-    //pthread_create(&capture_thread, NULL, audioCapture, (void*)this); // this?
   }
   ~audioInput() {             // destructor
     snd_pcm_close (pcm_handle);
@@ -270,21 +252,9 @@ class audioInput {
       return(-1);
     }
     return 1;
-  } // ........................................
-  
-  void quitNow() {
-    quit = true;
-    //      pthread_kill_other_threads_np();
-    snd_pcm_close (pcm_handle);
   }
   
-  union byte {                    // used to convert from signed to unsigned
-    unsigned char uchar_val;
-    char char_val;
-  };
-  
-  int mod( int i ) {  // true modulo (handles negative) into our buffer b
-    // wraps i to lie in [0, (b_size-1)]. rewritten Barnett
+  int mod( int i ) { 
     int r = i % b_size;
     if (r<0)
       r += b_size;

@@ -7,20 +7,6 @@
 #include <pthread.h>
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_font.h>
-
-/*
-#define DISPLAY_WIDTH 640
-#define DISPLAY_HEIGHT 480
-#define GROUND_Y DISPLAY_HEIGHT * 3 / 4
-#define PLAYER_X DISPLAY_WIDTH / 4
-#define PLAYER_SIZE 20
-
-#define OBSTACLE_SMALL_HEIGHT 50
-#define OBSTACLE_BIG_HEIGHT 100
-#define OBSTACLE_WIDTH 20
-#define OBSTACLE_SMALL_GAP 60
-*/
 
 void draw_player(int y_pos) {
     al_draw_filled_rectangle(PLAYER_POSITION - PLAYER_SIZE, GROUND_Y - y_pos - PLAYER_SIZE, 
@@ -59,13 +45,12 @@ void draw_obstacle(int x_pos, int obstacle_type) {
 
 
 void* processD(void* varg) {
-    std::cout << "Proces D: " << pthread_self() << "\n";
     if (thread_to_core(3) != 0) {
         std::cout << "Nie udalo sie przypisac procesu D do rdzenia 3\n";
         return NULL;
     }
     
-    Data* data = ((Data*)varg);
+    SharedMemory* sm = ((SharedMemory*)varg);
 
     ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
     if(!queue)
@@ -85,13 +70,6 @@ void* processD(void* varg) {
     if(!disp)
     {
         printf("couldn't initialize display\n");
-        return NULL;
-    }
-
-    ALLEGRO_FONT* font = al_create_builtin_font();
-    if(!font)
-    {
-        printf("couldn't initialize font\n");
         return NULL;
     }
     
@@ -129,17 +107,16 @@ void* processD(void* varg) {
         if(redraw && al_is_event_queue_empty(queue))
         {
             al_clear_to_color(al_map_rgb(0, 0, 0));
-            al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "Hello world!");
             al_draw_line(0, GROUND_Y, DISPLAY_WIDTH, GROUND_Y, al_map_rgb(255, 255, 255), 1);
             
-            int playerPosX;
-            int temp[MAX_OBSTACLES];
-            int temp1[MAX_OBSTACLES];
-            data->getGameInfo(playerPosX, temp, temp1);
+            int playerPosY;
+            int obstaclePosX[MAX_OBSTACLES];
+            int obstacleType[MAX_OBSTACLES];
+            sm->getGameInfo(playerPosY, obstaclePosX, obstacleType);
             
-            draw_player(playerPosX);
+            draw_player(playerPosY);
             for (int i = 0; i < MAX_OBSTACLES; ++i) {
-                draw_obstacle(temp[i], temp1[i]);
+                draw_obstacle(obstaclePosX[i], obstacleType[i]);
             }
             
             al_flip_display();
@@ -147,7 +124,6 @@ void* processD(void* varg) {
         }
     }
 
-    al_destroy_font(font);
     al_destroy_display(disp);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);

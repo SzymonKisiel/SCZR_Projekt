@@ -62,16 +62,6 @@ public :
         jumpSpeed = startVelocity;
         isInFlight = true;
     }
-    /*
-    void jump(int newJumpHeight){
-        jumpHeight = newJumpHeight;
-
-        if(jumpHeight == SMALL_JUMP_HEIGHT) startVelocity = SMALL_VELOCITY;
-        else if(jumpHeight == BIG_JUMP_HEIGHT) startVelocity = BIG_VELOCITY;
-
-        jumpSpeed = startVelocity;
-        isInFlight = true;
-    }*/
 
     void goNext(){
         positionY += jumpSpeed;
@@ -230,12 +220,11 @@ public:
 		al_start_timer( timer_FPS );
 		
         for(int i=1; i<=MAX_OBSTACLES; ++i){
-            //generateObstacle(POSITION_OF_GENERATING_OBSTACLES/i);
             generateObstacle(i * DISPLAY_WIDTH / 3 + DISPLAY_WIDTH / 3);
         }
     }
 
-    void loop(Data* data, Timer t){
+    void loop(SharedMemory* sm, Timer t){
         bool flag [100];
         int l = 0;
 
@@ -264,15 +253,7 @@ public:
                     temp1[i] = obstacles[i].getTypeOfObstacle();
                 }
 
-
-                /*std::cout << "Pisanie:\n";
-                std::cout << '\t' << player.getPositionY() << '\n';
-                for (int i = 0; i < MAX_OBSTACLES; ++i) {
-                    std::cout << '\t' << obstacles[i].getPositionX() << '\n';
-                    std::cout << '\t' << obstacles[i].getTypeOfObstacle() << '\n';
-                }*/
-
-                State state = data->getState();
+                State state = sm->getState();
 
                 if(!player.getIsInFlight() && state != noJump)
                     player.jump(state);
@@ -282,7 +263,7 @@ public:
 
                 player.setScore(player.getPlayerScore()+player.getSpeed());
 
-                data->setGameInfo(player.getPositionY(), temp, temp1);
+                sm->setGameInfo(player.getPositionY(), temp, temp1);
             }
             flag[l]=true;
 //            auto t2 = std::chrono::high_resolution_clock::now();
@@ -323,12 +304,11 @@ public:
 void* processC(void* varg)
 {
     Timer t;
-    std::cout << "Proces C: " << pthread_self() << "\n";
     if (thread_to_core(2) != 0) {
         std::cout << "Nie udalo sie przypisac procesu C do rdzenia 2\n";
         return NULL;
     }
-    Data* data = ((Data*)varg);
+    SharedMemory* sm = ((SharedMemory*)varg);
     
     srand(time(0));
 
@@ -340,7 +320,7 @@ void* processC(void* varg)
 
     Game game;
     game.start();
-    game.loop(data, t);
+    game.loop(sm, t);
     game.finish();
     
     std::cout << "Proces C zakonczony\n";
