@@ -77,9 +77,9 @@ public :
             startVelocity = 0;
             isInFlight = false;
         }
-        /*else if (jumpSpeed < 1 && jumpSpeed > -1) {
-            jumpSpeed -= GRAVITY/100;
-        }*/
+        else if (jumpSpeed < GRAVITY && jumpSpeed > -GRAVITY) {
+            jumpSpeed -= GRAVITY/FLIGHT_LENGTH;
+        }
         else
             jumpSpeed -= GRAVITY;
     }
