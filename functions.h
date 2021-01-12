@@ -107,7 +107,7 @@ public:
 #define PI              3.14159265358979323846
 #define TWO_WIN_SIZE    13
 
-class audioInput {
+class AudioInput {
   public:
   char *chunk;
   float *b, *specslice, *bwin, *winf, *sg;
@@ -146,7 +146,7 @@ class audioInput {
 
   }
 
-  audioInput() {            // nontrivial constructor
+  AudioInput() {            // nontrivial constructor
     channels = 2;       // Had to change to stereo for System76 ! (was mono)
     bytes_per_frame = 2 * channels;      // 16-bit
     req_rate = 44100;         // audio sampling rate in Hz
@@ -176,7 +176,7 @@ class audioInput {
 
     Hz_per_pixel = 1.0F / (win_size*dt);
   }
-  ~audioInput() {             // destructor
+  ~AudioInput() {             // destructor
     snd_pcm_close (pcm_handle);
     fftwf_destroy_plan(fftw_p);
   }

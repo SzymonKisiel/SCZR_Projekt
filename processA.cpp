@@ -8,7 +8,7 @@
 #include "functions.h"
 
 
-int calculateFrequency(audioInput *ai)
+int calculateFrequency(AudioInput *ai)
 {
     int N = ai->win_size;             // transform length
     int nf = ai->n_f;              // # freqs to fill in powerspec
@@ -44,7 +44,7 @@ void* processA(void* varg) {
     }
     
     SharedMemory* sm = ((SharedMemory*)varg);
-    audioInput* ai = new audioInput();
+    AudioInput* ai = new AudioInput();
     
     float inv256 = 1.0 / 256.0;
     float inv256_2 = inv256*inv256;

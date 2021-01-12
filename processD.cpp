@@ -81,7 +81,6 @@ void* processD(void* varg) {
     al_register_event_source(queue, al_get_display_event_source(disp));
     al_register_event_source(queue, al_get_timer_event_source(timer));
 
-    bool done = false;
     bool redraw = true;
     ALLEGRO_EVENT event;
     
@@ -93,12 +92,10 @@ void* processD(void* varg) {
         switch(event.type)
         {
             case ALLEGRO_EVENT_TIMER:
-                // game logic goes here.
                 redraw = true;
                 break;
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
                 sm->setEnd();
-                done = true;
                 break;
         }
 
