@@ -1,7 +1,6 @@
 #include <unistd.h>
 #include <iostream>
 
-// 
 // return 0 on success
 int thread_to_core(int core_id) {
     int num_cores = sysconf(_SC_NPROCESSORS_ONLN);

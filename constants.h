@@ -4,7 +4,7 @@ const int DISPLAY_WIDTH = 640;
 const int DISPLAY_HEIGHT = 480;
 
 const int GROUND_Y = DISPLAY_HEIGHT * 3 / 4;
-const int PLAYER_POSITION = DISPLAY_WIDTH / 4; //PLAYER_X
+const int PLAYER_POSITION = DISPLAY_WIDTH / 4;
 const int PLAYER_SIZE = 20;
 
 const int MAX_OBSTACLES=3;

@@ -16,6 +16,7 @@ enum State
     bigJump = 2
 };
 
+
 class SharedMemory {
     sem_t sem;
     sem_t sem2;

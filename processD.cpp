@@ -18,7 +18,7 @@ void draw_player(int y_pos) {
 
 void draw_obstacle(int x_pos, int obstacle_type) {
     switch(obstacle_type) {
-        case 0:
+        case 0: // smallDown
             al_draw_filled_rectangle(x_pos, GROUND_Y, 
                                      x_pos + OBSTACLE_WIDTH, GROUND_Y - OBSTACLE_SMALL_HEIGHT, 
                                      al_map_rgb(255, 0, 0)
@@ -28,13 +28,13 @@ void draw_obstacle(int x_pos, int obstacle_type) {
                                      al_map_rgb(255, 0, 0)
                                     );
             break;
-        case 1:
+        case 1: //bigDown
             al_draw_filled_rectangle(x_pos, GROUND_Y, 
                                      x_pos + OBSTACLE_WIDTH, GROUND_Y - OBSTACLE_BIG_HEIGHT, 
                                      al_map_rgb(255, 0, 0)
                                     );
             break;
-        case 2:
+        case 2: //up
             al_draw_filled_rectangle(x_pos, GROUND_Y - OBSTACLE_SMALL_HEIGHT, 
                                      x_pos + OBSTACLE_WIDTH, 0, 
                                      al_map_rgb(255, 0, 0)
@@ -42,7 +42,6 @@ void draw_obstacle(int x_pos, int obstacle_type) {
             break;
     }
 }
-
 
 void* processD(void* varg) {
     if (thread_to_core(3) != 0) {

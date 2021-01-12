@@ -7,12 +7,6 @@
 #include <ctime>
 #include <math.h>
 #include <allegro5/allegro.h>
-#include <chrono>
-#include "timercpp.h"
-
-
-
-using namespace std;
 
 enum typeOfObstacle
 {
@@ -20,6 +14,8 @@ enum typeOfObstacle
     bigDown = 1,
     up = 2,
 };
+
+using namespace std;
 
 class Player
 {
@@ -224,21 +220,9 @@ public:
         }
     }
 
-    void loop(SharedMemory* sm, Timer t){
-        bool flag [100];
-        int l = 0;
+    void loop(SharedMemory* sm){
 
         while(!gameOverConditions() && !sm->isEnd()){
-            flag[l]= false;
-/* SEGMENTATION_FAULT
-            t.setTimeout([&](int loop) {
-                if (!flag[ loop ]) {
-                    std::cout << "too slow proc C..." << loop << std::endl;
-                }// else {
-                   // std::cout << "ok " << loop << std::endl;}
-            }, 200, l);
-//            auto t1 = std::chrono::high_resolution_clock::now();
-*/
             al_wait_for_event( queue, & ev1 );
             if(ev1.type == ALLEGRO_EVENT_TIMER){
                 for(int i=0; i<MAX_OBSTACLES; ++i){
@@ -265,16 +249,6 @@ public:
 
                 sm->setGameInfo(player.getPositionY(), temp, temp1);
             }
-            flag[l]=true;
-//            auto t2 = std::chrono::high_resolution_clock::now();
-            l++;
-            l=l%100;
-
-
-//            auto duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
-          /*  std::cout << duration<<endl;
-            if (duration > 17000){
-                std::cout << "to slow... process C: " << duration<<" "<< l-1 << endl; }*/
         }
 
 
@@ -293,8 +267,7 @@ public:
     void finish(){
         player.setBestScore(player.getPlayerScore());
 
-        cout << player.getPlayerBestScore() << std::endl;
-        cout << "It is all over" << std::endl;
+        std::cout << "Wynik: " << player.getPlayerBestScore() << std::endl;
         
         al_destroy_timer(timer_FPS);
         al_destroy_event_queue(queue);
@@ -303,7 +276,6 @@ public:
 
 void* processC(void* varg)
 {
-    Timer t;
     if (thread_to_core(2) != 0) {
         std::cout << "Nie udalo sie przypisac procesu C do rdzenia 2\n";
         return NULL;
@@ -320,7 +292,7 @@ void* processC(void* varg)
 
     Game game;
     game.start();
-    game.loop(sm, t);
+    game.loop(sm);
     game.finish();
     
     sm->setEnd();

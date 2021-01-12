@@ -6,12 +6,6 @@
 #include "functions.h"
 #include <allegro5/allegro.h>
 
-void* fun(void* varg) {
-    printf("Test watek\n");
-    return NULL;
-}
-
-
 int main(int argc, char **argv)
 {
     std::cout << "Liczba rdzeni procesora: " << sysconf(_SC_NPROCESSORS_ONLN) << "\n";

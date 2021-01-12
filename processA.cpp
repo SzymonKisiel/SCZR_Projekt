@@ -12,7 +12,6 @@ int calculateFrequency(AudioInput *ai)
 {
     int N = ai->win_size;             // transform length
     int nf = ai->n_f;              // # freqs to fill in powerspec
-                    // actual windowed power spectrum
     for ( int i=0; i<N; ++i )     // copy last N samples & mult by window func
         ai->bwin[i] = ai->winf[i] * ai->b[ai->mod(ai->b_ind - N + i)];
 
@@ -68,6 +67,7 @@ void* processA(void* varg) {
         int freq = calculateFrequency(ai);
         sm->setFreq(freq); //send frequency to process B
     }
+    free(ai);
     
     std::cout << "Proces A zakonczony\n";
     return NULL;
