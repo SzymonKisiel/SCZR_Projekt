@@ -34,6 +34,8 @@
         <Library Value="allegro_primitives"/>
         <Library Value="allegro_font"/>
         <Library Value="pthread"/>
+        <Library Value="asound"/>
+        <Library Value="fftw3f"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>

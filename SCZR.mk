@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=sk
-Date                   :=09/01/21
+Date                   :=12/01/21
 CodeLitePath           :=/home/sk/.codelite
 LinkerName             :=/usr/bin/g++
 SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
@@ -39,8 +39,8 @@ LinkOptions            :=
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)usr/include 
 IncludePCH             := 
 RcIncludePath          := 
-Libs                   := $(LibrarySwitch)allegro $(LibrarySwitch)allegro_primitives $(LibrarySwitch)allegro_font $(LibrarySwitch)pthread 
-ArLibs                 :=  "allegro" "allegro_primitives" "allegro_font" "pthread" 
+Libs                   := $(LibrarySwitch)allegro $(LibrarySwitch)allegro_primitives $(LibrarySwitch)allegro_font $(LibrarySwitch)pthread $(LibrarySwitch)asound $(LibrarySwitch)fftw3f 
+ArLibs                 :=  "allegro" "allegro_primitives" "allegro_font" "pthread" "asound" "fftw3f" 
 LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)usr/lib 
 
 ##
