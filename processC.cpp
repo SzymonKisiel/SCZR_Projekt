@@ -228,9 +228,9 @@ public:
         bool flag [100];
         int l = 0;
 
-        while(!gameOverConditions()){
+        while(!gameOverConditions() && !sm->isEnd()){
             flag[l]= false;
-
+/* SEGMENTATION_FAULT
             t.setTimeout([&](int loop) {
                 if (!flag[ loop ]) {
                     std::cout << "too slow proc C..." << loop << std::endl;
@@ -238,7 +238,7 @@ public:
                    // std::cout << "ok " << loop << std::endl;}
             }, 200, l);
 //            auto t1 = std::chrono::high_resolution_clock::now();
-
+*/
             al_wait_for_event( queue, & ev1 );
             if(ev1.type == ALLEGRO_EVENT_TIMER){
                 for(int i=0; i<MAX_OBSTACLES; ++i){
@@ -322,6 +322,8 @@ void* processC(void* varg)
     game.start();
     game.loop(sm, t);
     game.finish();
+    
+    sm->setEnd();
     
     std::cout << "Proces C zakonczony\n";
     return NULL;

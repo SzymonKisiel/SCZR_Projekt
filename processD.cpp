@@ -97,11 +97,12 @@ void* processD(void* varg) {
                 redraw = true;
                 break;
             case ALLEGRO_EVENT_DISPLAY_CLOSE:
+                sm->setEnd();
                 done = true;
                 break;
         }
 
-        if(done)
+        if(sm->isEnd())
             break;
 
         if(redraw && al_is_event_queue_empty(queue))

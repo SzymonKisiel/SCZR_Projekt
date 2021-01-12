@@ -21,6 +21,8 @@ class SharedMemory {
     sem_t sem2;
     sem_t sem3;
     
+    bool end;
+    
     //A i B
     int freq;
     
@@ -37,6 +39,7 @@ public:
         sem_init(&sem2, 0, 1);
         sem_init(&sem3, 0, 1);
         state = noJump;
+        end = false;
     }
 
     void setFreq(int freq) {
@@ -90,6 +93,14 @@ public:
             obstacleType[i] = this->obstacleType[i];        
         }
         sem_post(&sem);
+    }
+    
+    void setEnd() {
+        this->end = true;
+    }
+    
+    bool isEnd() {
+        return this->end;
     }
 };
 

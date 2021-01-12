@@ -15,7 +15,7 @@ void* processB(void* varg) {
     int freq;
     State state = noJump;
     
-    while (true) {
+    while (!sm->isEnd()) {
         freq = sm->getFreq(); //recieve frequency from process A
         //std::cout << freq << std::endl; 
         if (freq < 400)

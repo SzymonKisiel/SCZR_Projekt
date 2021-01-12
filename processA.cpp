@@ -49,7 +49,7 @@ void* processA(void* varg) {
     float inv256 = 1.0 / 256.0;
     float inv256_2 = inv256*inv256;
     
-    while(true) {
+    while (!sm->isEnd()) {
         int n;
         while((n = snd_pcm_readi(ai->pcm_handle, ai->chunk, ai->frames_per_period)) < 0 ) {
             fprintf(stderr, "Error occured while recording: %s\n", snd_strerror(n));
